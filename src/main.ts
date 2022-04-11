@@ -13,8 +13,6 @@ export async function run() {
     const authorsToCheckCsv = core.getInput('authorsToCheck');
     core.info("we get here 2")
 
-
-
     // If there are authors we need to specifically block, only block those.
     if (authorsToCheckCsv) {
       core.info(JSON.stringify(context))
