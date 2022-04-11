@@ -1,19 +1,45 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import * as core from '@actions/core';
+const { GitHub, context } = require('@actions/github')
+const parse = require('parse-diff')
 
-async function run(): Promise<void> {
+async function run() {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const token = core.getInput('github-token', { required: true })
+    const github = new GitHub(token, {})
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    let authorIsInListToCheck = false;
 
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    const authorsToCheckCsv = core.getInput('authorsToCheck');
+
+    // If there are authors we need to specifically block, only block those.
+    if (authorsToCheckCsv) {
+      const author = context.payload.pull_request.user.login;
+
+      const authorArray = authorsToCheckCsv.split(',');
+
+      const lowerTrimmedArray = authorArray.map((author: string) => {
+        return author.trim().toLowerCase();
+      });
+
+      const lowerTrimmedAuthorToCheck = author.trim().toLowerCase();
+
+      authorIsInListToCheck = lowerTrimmedArray.includes(lowerTrimmedAuthorToCheck)
+    }
+
+    // If the authors should be blocked or there are none. The default is to block everyone.
+    if (authorIsInListToCheck || !authorsToCheckCsv) {
+      // Check if we should ensure a JIRA/REQ/Other is linked
+      // If no string exists, do not check.
+      const jiraString = core.getInput('jiraString')
+
+      if (jiraString && context.payload.pull_request.body.indexOf(jiraString) < 0) {
+        core.setFailed("The body of the PR does not contain " + jiraString)
+      }
+    }
+
+  } catch (error: any) {
+    core.setFailed(error.message);
   }
 }
 
-run()
+run();

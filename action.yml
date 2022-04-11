@@ -1,11 +1,14 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Check PR body'
+description: 'Check PR body for words (e.g.: JIRA links) for specific authors'
+author: 'Deeds'
+branding:
+  icon: 'git-pull-request'
+  color: 'gray-dark'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  authorsToCheck:
+    description: 'A csv string of specific authors that this action will apply to'
+  jiraString:
+    description: 'Word/String that should not be in the PR body, can be left blank (no functionality will occur)'
 runs:
   using: 'node16'
   main: 'dist/index.js'
