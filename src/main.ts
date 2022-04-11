@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 const { GitHub, context } = require('@actions/github')
-const parse = require('parse-diff')
 
 async function run() {
   try {
