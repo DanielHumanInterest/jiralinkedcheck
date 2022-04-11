@@ -36,55 +36,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const wait_1 = __nccwpck_require__(817);
+const { GitHub, context } = __nccwpck_require__(716);
+const parse = __nccwpck_require__(202);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const ms = core.getInput('milliseconds');
-            core.debug(`Waiting ${ms} milliseconds ...`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-            core.debug(new Date().toTimeString());
-            yield (0, wait_1.wait)(parseInt(ms, 10));
-            core.debug(new Date().toTimeString());
-            core.setOutput('time', new Date().toTimeString());
+            const token = core.getInput('github-token', { required: true });
+            const github = new GitHub(token, {});
+            let authorIsInListToCheck = false;
+            const authorsToCheckCsv = core.getInput('authorsToCheck');
+            // If there are authors we need to specifically block, only block those.
+            if (authorsToCheckCsv) {
+                const author = context.payload.pull_request.user.login;
+                const authorArray = authorsToCheckCsv.split(',');
+                const lowerTrimmedArray = authorArray.map((author) => {
+                    return author.trim().toLowerCase();
+                });
+                const lowerTrimmedAuthorToCheck = author.trim().toLowerCase();
+                authorIsInListToCheck = lowerTrimmedArray.includes(lowerTrimmedAuthorToCheck);
+            }
+            // If the authors should be blocked or there are none. The default is to block everyone.
+            if (authorIsInListToCheck || !authorsToCheckCsv) {
+                // Check if we should ensure a JIRA/REQ/Other is linked
+                // If no string exists, do not check.
+                const jiraString = core.getInput('jiraString');
+                if (jiraString && context.payload.pull_request.body.indexOf(jiraString) < 0) {
+                    core.setFailed("The body of the PR does not contain " + jiraString);
+                }
+            }
         }
         catch (error) {
-            if (error instanceof Error)
-                core.setFailed(error.message);
+            core.setFailed(error.message);
         }
     });
 }
 run();
-
-
-/***/ }),
-
-/***/ 817:
-/***/ (function(__unused_webpack_module, exports) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wait = void 0;
-function wait(milliseconds) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise(resolve => {
-            if (isNaN(milliseconds)) {
-                throw new Error('milliseconds not a number');
-            }
-            setTimeout(() => resolve('done!'), milliseconds);
-        });
-    });
-}
-exports.wait = wait;
 
 
 /***/ }),
@@ -1639,6 +1625,22 @@ if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
   debug = function() {};
 }
 exports.debug = debug; // for test
+
+
+/***/ }),
+
+/***/ 716:
+/***/ ((module) => {
+
+module.exports = eval("require")("@actions/github");
+
+
+/***/ }),
+
+/***/ 202:
+/***/ ((module) => {
+
+module.exports = eval("require")("parse-diff");
 
 
 /***/ }),
