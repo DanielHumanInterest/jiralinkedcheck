@@ -2,23 +2,23 @@ import * as core from '@actions/core';
 const { GitHub, context } = require('@actions/github')
 
 export async function run() {
-  console.log("we get here ??")
+  core.info("we get here ??")
   try {
-    console.log("we get here")
+    core.info("we get here")
     const token = core.getInput('github-token', { required: true })
     const github = new GitHub(token, {})
 
     let authorIsInListToCheck = false;
 
     const authorsToCheckCsv = core.getInput('authorsToCheck');
-    console.log("we get here 2")
+    core.info("we get here 2")
 
     // If there are authors we need to specifically block, only block those.
     if (authorsToCheckCsv) {
-      console.log(JSON.stringify(context))
+      core.info(JSON.stringify(context))
 
       const author = context.payload.pull_request?.user?.login;
-      console.log("we get here 3")
+      core.info("we get here 3")
 
       if (!author) {
         // If there is no author, there is no PR, and we can accept by default.
