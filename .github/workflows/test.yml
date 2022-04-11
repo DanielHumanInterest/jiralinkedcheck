@@ -22,3 +22,4 @@ jobs:
         with:
           authorsToCheck: 'danielhumaninterest, potato'
           jiraString: 'captain401.atlassian'
+          github-token: ${{github.token}}
