@@ -14,7 +14,6 @@ export async function run() {
       return;
     }
 
-
     let authorIsInListToCheck = false;
 
     const authorsToCheckCsv = core.getInput('authorsToCheck');
