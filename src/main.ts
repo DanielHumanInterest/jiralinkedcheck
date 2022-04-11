@@ -11,6 +11,8 @@ async function run() {
 
     const authorsToCheckCsv = core.getInput('authorsToCheck');
 
+
+
     // If there are authors we need to specifically block, only block those.
     if (authorsToCheckCsv) {
       const author = context.payload.pull_request.user.login;
