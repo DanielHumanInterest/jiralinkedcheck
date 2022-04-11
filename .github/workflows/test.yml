@@ -2,6 +2,7 @@ name: 'build-test'
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
+  workflow_dispatch:
 
 jobs:
   build: # make sure build/ci work properly
@@ -17,7 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: 'Check PR'
-        uses: ./
+        uses: DanielHumanInterest/jiralinkedcheck@main
         with:
           authorsToCheck: 'danielhumaninterest, potato'
           jiraString: 'captain401.atlassian'
+          github-token: ${{github.token}}
