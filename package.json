@@ -25,7 +25,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.6.0"
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^1.1.0",
+    "parse-diff": "^0.6.0"
   },
   "devDependencies": {
     "@types/node": "^16.10.5",
