@@ -12,7 +12,12 @@ export async function run() {
 
     // If there are authors we need to specifically block, only block those.
     if (authorsToCheckCsv) {
-      const author = context.payload.pull_request.user.login;
+      const author = context.payload.pull_request?.user?.login;
+
+      if (!author) {
+        // If there is no author, there is no PR, and we can accept by default.
+        return;
+      }
 
       const authorArray = authorsToCheckCsv.split(',');
 
