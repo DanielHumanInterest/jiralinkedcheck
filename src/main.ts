@@ -21,6 +21,7 @@ export async function run() {
       core.info("we get here 3")
 
       if (!author) {
+        core.info("There is no author, we assume this check is not running on a PR and should pass this check by default")
         // If there is no author, there is no PR, and we can accept by default.
         return;
       }
