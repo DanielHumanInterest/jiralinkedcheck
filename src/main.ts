@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 const { GitHub, context } = require('@actions/github')
 
-async function run() {
+export async function run() {
   try {
     const token = core.getInput('github-token', { required: true })
     const github = new GitHub(token, {})

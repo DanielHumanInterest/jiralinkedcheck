@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: 'Check PR'
-        uses: ./
+        uses: DanielHumanInterest/jiralinkedcheck@main
         with:
           authorsToCheck: 'danielhumaninterest, potato'
           jiraString: 'captain401.atlassian'
