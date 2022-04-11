@@ -7,7 +7,7 @@ branding:
 inputs:
   authorsToCheck:
     description: 'A csv string of specific authors that this action will apply to'
-  jiraString:
+  wordToCheck:
     description: 'Word/String that should not be in the PR body, can be left blank (no functionality will occur)'
   github-token:
     description: 'Github token, added automagically'

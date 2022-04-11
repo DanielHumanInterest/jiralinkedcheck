@@ -22,5 +22,5 @@ jobs:
         uses: DanielHumanInterest/jiralinkedcheck@main
         with:
           authorsToCheck: 'danielhumaninterest, potato'
-          jiraString: 'captain401.atlassian'
+          wordToCheck: 'captain401.atlassian'
           github-token: ${{github.token}}
