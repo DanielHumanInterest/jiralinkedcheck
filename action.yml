@@ -8,7 +8,9 @@ inputs:
   authorsToCheck:
     description: 'A csv string of specific authors that this action will apply to'
   wordToCheck:
-    description: 'Word/String that should not be in the PR body, can be left blank (no functionality will occur)'
+    description: 'Word/String that should be in the PR body, can be left blank (no functionality will occur)'
+  wordToExclude:
+    description: 'Word/String that must not be in the PR body, can be left blank (no functionality will occur)'
   github-token:
     description: 'Github token, added automagically'
 runs:

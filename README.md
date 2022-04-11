@@ -24,12 +24,15 @@ jobs:
       with:
         authorsToCheck: 'danielhumaninterest, potato, anotherNameHERE'
         wordToCheck: 'captain401.atlassian'
+        wordToExclude: 'browse/_'
         github-token: ${{github.token}}
 ```
 
 The `wordToCheck` variable will include the string that we want the body of the PR to include.
 
-They can be left empty if no check wants to be done.
+The `wordToExclude` variable will include the string that we want to ensure the PR body does not contain.
+
+They can be left empty if no check wants to be done, the action will pass.
 
 The `authorsToCheck` variable should include all authors that this check should apply to. If no authors are passed, it will apply the check to all users/authors.
 

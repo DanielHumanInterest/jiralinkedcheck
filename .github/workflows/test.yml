@@ -23,4 +23,5 @@ jobs:
         with:
           authorsToCheck: 'danielhumaninterest, potato'
           wordToCheck: 'captain401.atlassian'
+          wordToExclude: 'browse/_'
           github-token: ${{github.token}}

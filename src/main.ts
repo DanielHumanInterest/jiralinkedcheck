@@ -7,10 +7,11 @@ export async function run() {
     const github = new GitHub(token, {})
 
     const wordToCheck = core.getInput('wordToCheck')
+    const wordToExclude = core.getInput('wordToExclude')
 
     // If no string exists, do not check.
-    if (!wordToCheck) {
-      core.info("No word was passed to verify it's existence in the body of the PR. The check passes by default.")
+    if (!wordToCheck && !wordToExclude) {
+      core.info("No word was passed to verify it's existence in or exclusion from the body of the PR. The check passes by default.")
       return;
     }
 
@@ -41,9 +42,15 @@ export async function run() {
 
     // If the authors should be blocked or there are none. The default is to block everyone.
     if (authorIsInListToCheck || !authorsToCheckCsv) {
-      // Check if we should ensure a JIRA/REQ/Other is linked
+
+      // Ensure the PR contains the required string
       if (context.payload.pull_request.body.indexOf(wordToCheck) < 0) {
         core.setFailed("The body of the PR does not contain " + wordToCheck)
+      }
+
+      // Ensure the PR body does not contain a denylisted string
+      if (context.payload.pull_request.body.indexOf(wordToExclude) >= 0) {
+        core.setFailed("The body of the PR contains a denylisted word " + wordToExclude)
       }
     }
 
