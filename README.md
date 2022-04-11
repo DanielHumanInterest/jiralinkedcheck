@@ -40,8 +40,10 @@ the MIT license.
 
 ## To change
 
-Make a change.
+If you're on a branch, make a change.
 
-npm run publish
+npm run ncc
+
+Merge, including the change in dist/index.js.
 
 Done.
