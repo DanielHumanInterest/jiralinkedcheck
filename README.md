@@ -42,9 +42,6 @@ the MIT license.
 
 Make a change.
 
-Build with ncc:
-
-ncc build src/main.ts -o dist
-npm run package
+npm run publish
 
 Done.
